@@ -69,7 +69,17 @@ void emptyTT()
   int i;
 
   for (i=0; i<TRANSIZE; i++) {
-    ht[i] = (hashentry){0,0,0,0,0};
+#if (LOCKSIZE<=32)
+    ht[i].biglock = 0;
+    ht[i].bigwork = 0;
+    ht[i].newlock = 0;
+#else
+    ht[i].biglock = 0;
+    ht[i].bigwork = 0;
+    ht[i].newlock = 0;
+#endif
+    ht[i].newscore = 0;
+    ht[i].bigscore = 0;
   }
   posed = 0;
 }

@@ -20,8 +20,19 @@
 // You may redistribute if your distributees have the
 // same rights and restrictions.
 
+#ifdef _WIN32
+	#include <windows.h>
+	typedef INT64 int64;
+	typedef UINT64 uint64;
+#else
+	#include <stdint.h>
+	typedef uint64_t uint64;
+	typedef int64_t int64;
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
+
 #define WIDTH 7
 #define HEIGHT 6
 // bitmask corresponds to board as follows in 7x6 case:
@@ -37,9 +48,6 @@
 #define SIZE (HEIGHT*WIDTH)
 #define SIZE1 (H1*WIDTH)
 
-#include <sys/types.h>
-typedef u_int64_t uint64;
-typedef int64_t int64;
 #if (SIZE1<=64)
   typedef uint64 bitboard;
 #else

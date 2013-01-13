@@ -11,25 +11,44 @@
 // same rights and restrictions.
 
 #include "TransGame.c"
-#include <sys/time.h>
-#include <sys/resource.h>
  
 #define BOOKPLY 0  // additional plies to be searched full-width
 #define REPORTPLY 2 // additional plies on which to report value
 
+#ifdef WIN32
+#include <windows.h>
+/* Be careful with this function -- it SEEMS to be reporting
+ * total elapsed time for ALL CPUs on the system (tried on a P4 HT)
+ * though, of course, this thread is running on only one of them.
+ * So on my system, reported results are half what they should be :/
+ */
+uint64 millisecs()
+{
+	FILETIME crtime,extime,ktime,utime;
+	UINT64 elapsed;
+	if(GetProcessTimes(GetCurrentProcess(),&crtime,&extime,&ktime,&utime)){
+		elapsed = ((UINT64)utime.dwHighDateTime << 32) 
+		         | (UINT64)utime.dwLowDateTime;
+		return elapsed/10000;
+	}else
+		return 0;
+}
+#else
+#include <sys/time.h>
+#include <sys/resource.h>
 uint64 millisecs()
 {
   struct rusage rusage;
   getrusage(RUSAGE_SELF,&rusage);
   return rusage.ru_utime.tv_sec * 1000 + rusage.ru_utime.tv_usec / 1000;
 }
+int min(int x, int y) { return x<y ? x : y; }
+int max(int x, int y) { return x>y ? x : y; }
+#endif
 
 int history[2][SIZE1];
 uint64 nodes, msecs;
 int bookply,reportply;
-
-int min(int x, int y) { return x<y ? x : y; }
-int max(int x, int y) { return x>y ? x : y; }
 
 void inithistory()
 {
@@ -179,13 +198,13 @@ int main()
 
   for (;;) {
     reset();
-    while ((c = getchar()) != -1) {
+    while ((c = getchar()) != EOF) {
       if (c >= '1' && c <= '0'+WIDTH)
         makemove(c - '1');
       else if (c == '\n')
         break;
     }
-    if (c == -1)
+    if (c == EOF)
       break;
     printf("\nSolving %d-ply position after ", nplies);
     printMoves();
@@ -197,7 +216,7 @@ int main()
     for (work=0; (poscnt>>=1) != 0; work++) ; //work = log of #positions stored 
     printf("score = %d (%c)  work = %d\n",
       result, "#-<=>+"[result], work);
-    printf("%lu pos / %lu msec = %.1f Kpos/sec\n",
+    printf("%llu pos / %llu msec = %.1f Kpos/sec\n",
       nodes, msecs, (double)nodes/msecs);
     htstat();
   }
