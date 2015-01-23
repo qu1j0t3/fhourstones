@@ -1,5 +1,4 @@
 // Fhourstones 3.1 Board Logic
-// (http://www.cwi.nl/~tromp/c4/fhour.html)
 //
 // implementation of the well-known game
 // usually played on a vertical board of 7 columns by 6 rows,
@@ -13,7 +12,7 @@
 //      Insulindeweg 908
 //      1095 DX Amsterdam
 //      Netherlands
-// E-mail: tromp@cwi.nl
+// E-mail: john.tromp at gmail.com
 //
 // This notice must not be removed.
 // This software must not be sold for profit.

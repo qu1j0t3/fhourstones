@@ -1,5 +1,4 @@
 // Java Fhourstones 3.1 Transposition table logic
-// (http://www.cwi.nl/~tromp/c4/fhour.html)
 //
 // implementation of the well-known game
 // usually played on a vertical board of 7 columns by 6 rows,

@@ -3,7 +3,7 @@
 //      Insulindeweg 908
 //      1095 DX Amsterdam
 //      Netherlands
-// E-mail: tromp@cwi.nl
+// E-mail: john.tromp at gmail.com
 //
 // This notice must not be removed.
 // This software must not be sold for profit.
